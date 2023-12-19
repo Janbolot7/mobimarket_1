@@ -51,6 +51,10 @@ public class RegistrationService {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
         }
 
+        if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
+        }
+
         User user = userService.createNewUser(registrationUserDto);
 
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
