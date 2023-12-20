@@ -3,7 +3,8 @@ package kg.startproject.mobimarket_1.service;
 import kg.startproject.mobimarket_1.dto.CheckUserDto;
 import kg.startproject.mobimarket_1.dto.request.JwtRequest;
 import kg.startproject.mobimarket_1.dto.RegistrationUserDto;
-import kg.startproject.mobimarket_1.dto.response.RegistrtionResponse;
+import kg.startproject.mobimarket_1.dto.response.CheckUserResponse;
+import kg.startproject.mobimarket_1.dto.response.RegistrationResponse;
 import kg.startproject.mobimarket_1.model.User;
 import kg.startproject.mobimarket_1.exceptions.AppError;
 import kg.startproject.mobimarket_1.repository.UserRepository;
@@ -49,7 +50,7 @@ public class RegistrationService {
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
 
-        return ResponseEntity.ok(new RegistrtionResponse(null, userDetails.getUsername(), token));
+        return ResponseEntity.ok(new RegistrationResponse(null, userDetails.getUsername(), token));
     }
 
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
@@ -66,7 +67,7 @@ public class RegistrationService {
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
 
-        return ResponseEntity.ok(new RegistrtionResponse(user.getId(), user.getUsername(), token));
+        return ResponseEntity.ok(new RegistrationResponse(user.getId(), user.getUsername(), token));
 
     }
 
@@ -74,15 +75,18 @@ public class RegistrationService {
         boolean isUsernameExists = userRepository.findByUsername(checkUserDto.getUsername()).isPresent();
         boolean isEmailExists = userRepository.findByEmail(checkUserDto.getEmail()).isPresent();
 
-        if (isUsernameExists && isEmailExists) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем и email уже существует"), HttpStatus.BAD_REQUEST);
-        } else if (isUsernameExists) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
-        } else if (isEmailExists) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
+        if (isUsernameExists || isEmailExists) {
+            String errorMessage = "";
+            if (isUsernameExists && isEmailExists) {
+                errorMessage = "Пользователь с таким именем и email уже существует";
+            } else if (isUsernameExists) {
+                errorMessage = "Пользователь с таким именем уже существует";
+            } else if (isEmailExists) {
+                errorMessage = "Пользователь с таким email уже существует";
+            }
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), errorMessage), HttpStatus.BAD_REQUEST);
         }
 
         return ResponseEntity.ok("Имя пользователя и email доступны для регистрации");
     }
-
 }
