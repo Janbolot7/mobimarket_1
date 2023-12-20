@@ -1,5 +1,6 @@
 package kg.startproject.mobimarket_1.service;
 
+import kg.startproject.mobimarket_1.dto.CheckUserDto;
 import kg.startproject.mobimarket_1.dto.request.JwtRequest;
 import kg.startproject.mobimarket_1.dto.RegistrationUserDto;
 import kg.startproject.mobimarket_1.dto.response.RegistrtionResponse;
@@ -69,9 +70,9 @@ public class RegistrationService {
 
     }
 
-    public ResponseEntity<?> checkUserAvailability(@RequestBody RegistrationUserDto registrationUserDto) {
-        boolean isUsernameExists = userRepository.findByUsername(registrationUserDto.getUsername()).isPresent();
-        boolean isEmailExists = userRepository.findByEmail(registrationUserDto.getEmail()).isPresent();
+    public ResponseEntity<?> checkUserAvailability(@RequestBody CheckUserDto checkUserDto) {
+        boolean isUsernameExists = userRepository.findByUsername(checkUserDto.getUsername()).isPresent();
+        boolean isEmailExists = userRepository.findByEmail(checkUserDto.getEmail()).isPresent();
 
         if (isUsernameExists && isEmailExists) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем и email уже существует"), HttpStatus.BAD_REQUEST);
