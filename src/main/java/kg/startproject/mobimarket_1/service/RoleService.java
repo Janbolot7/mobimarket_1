@@ -1,4 +1,4 @@
-package kg.startproject.mobimarket_1.service.seviceImpl;
+package kg.startproject.mobimarket_1.service;
 
 import kg.startproject.mobimarket_1.model.Role;
 import kg.startproject.mobimarket_1.repository.RoleRepository;

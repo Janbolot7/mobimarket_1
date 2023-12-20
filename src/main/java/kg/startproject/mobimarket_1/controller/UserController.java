@@ -1,7 +1,7 @@
 package kg.startproject.mobimarket_1.controller;
 
 import kg.startproject.mobimarket_1.dto.UserDto;
-import kg.startproject.mobimarket_1.service.seviceImpl.UserServiceImpl;
+import kg.startproject.mobimarket_1.service.ServiceImplemintation.UserServiceImpl;
 import io.swagger.annotations.Api;
 import kg.startproject.mobimarket_1.configuration.SwaggerConfig;
 import lombok.AllArgsConstructor;

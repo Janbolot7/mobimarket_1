@@ -1,10 +1,11 @@
-package kg.startproject.mobimarket_1.service.seviceImpl;
+package kg.startproject.mobimarket_1.service.ServiceImplemintation;
 
 import kg.startproject.mobimarket_1.dto.RegistrationUserDto;
 import kg.startproject.mobimarket_1.dto.UserDto;
 import kg.startproject.mobimarket_1.model.User;
 import kg.startproject.mobimarket_1.exceptions.NotFoundException;
 import kg.startproject.mobimarket_1.repository.UserRepository;
+import kg.startproject.mobimarket_1.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -10,7 +10,6 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -18,6 +17,7 @@ public class SwaggerConfig {
     static String BEARER_AUTH = "Bearer";
     public static final String REGISTR = "Регистрация и Аутентификация NEW USER";
     public static final String USER = "Инструменты для USERS";
+    public static final String PRODUCT = "Создание нового продукта";
 
     @Bean
     public Docket api() {
@@ -30,7 +30,8 @@ public class SwaggerConfig {
                 .build()
 
                 .tags(new Tag(USER,""))
-                .tags(new Tag(REGISTR,""));
+                .tags(new Tag(REGISTR,""))
+                .tags(new Tag(PRODUCT,""));
 
     }
 

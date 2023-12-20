@@ -1,6 +1,6 @@
 package kg.startproject.mobimarket_1.configuration;
 
-import kg.startproject.mobimarket_1.service.seviceImpl.UserServiceImpl;
+import kg.startproject.mobimarket_1.service.ServiceImplemintation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

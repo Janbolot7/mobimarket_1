@@ -1,4 +1,4 @@
-package kg.startproject.mobimarket_1.service.seviceImpl;
+package kg.startproject.mobimarket_1.service;
 
 import kg.startproject.mobimarket_1.dto.request.JwtRequest;
 import kg.startproject.mobimarket_1.dto.RegistrationUserDto;
@@ -6,6 +6,7 @@ import kg.startproject.mobimarket_1.dto.response.RegistrtionResponse;
 import kg.startproject.mobimarket_1.model.User;
 import kg.startproject.mobimarket_1.exceptions.AppError;
 import kg.startproject.mobimarket_1.repository.UserRepository;
+import kg.startproject.mobimarket_1.service.ServiceImplemintation.UserServiceImpl;
 import kg.startproject.mobimarket_1.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -63,4 +68,20 @@ public class RegistrationService {
         return ResponseEntity.ok(new RegistrtionResponse(user.getId(), user.getUsername(), token));
 
     }
+
+    public ResponseEntity<?> checkUserAvailability(@RequestBody RegistrationUserDto registrationUserDto) {
+        boolean isUsernameExists = userRepository.findByUsername(registrationUserDto.getUsername()).isPresent();
+        boolean isEmailExists = userRepository.findByEmail(registrationUserDto.getEmail()).isPresent();
+
+        if (isUsernameExists && isEmailExists) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем и email уже существует"), HttpStatus.BAD_REQUEST);
+        } else if (isUsernameExists) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
+        } else if (isEmailExists) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok("Имя пользователя и email доступны для регистрации");
+    }
+
 }
