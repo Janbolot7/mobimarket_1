@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .antMatchers(
                         "/api/registration",
                         "/api/authentication",
+                        "/api/checkAvailability",
 
                         "/swagger-ui/",
                         "/swagger-ui/**",

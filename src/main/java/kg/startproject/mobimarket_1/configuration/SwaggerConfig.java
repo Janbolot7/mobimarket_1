@@ -17,7 +17,7 @@ public class SwaggerConfig {
     static String BEARER_AUTH = "Bearer";
     public static final String REGISTR = "Регистрация и Аутентификация NEW USER";
     public static final String USER = "Инструменты for USER";
-    public static final String PRODUCT = "Создание нового продукта";
+    public static final String PRODUCT = "Создание нового продукта 1";
 
     @Bean
     public Docket api() {

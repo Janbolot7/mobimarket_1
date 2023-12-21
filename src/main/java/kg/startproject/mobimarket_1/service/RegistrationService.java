@@ -89,4 +89,5 @@ public class RegistrationService {
 
         return ResponseEntity.ok("Имя пользователя и email доступны для регистрации");
     }
+
 }
