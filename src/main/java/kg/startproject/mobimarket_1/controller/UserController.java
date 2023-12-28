@@ -22,7 +22,6 @@ import java.util.List;
 
 
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Api(tags = SwaggerConfig.USER)
 @RestController
 @RequestMapping("/user")
