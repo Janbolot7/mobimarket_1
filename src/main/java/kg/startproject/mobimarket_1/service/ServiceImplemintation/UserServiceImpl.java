@@ -103,34 +103,34 @@ public class UserServiceImpl implements UserDetailsService{
 
 
 
-    public UserDto updateUser(UserDto userDto, long id) {
-        User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователя с таким id не существует!"));
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+//    public UserDto updateUser(UserDto userDto, long id) {
+//        User user = this.userRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("Пользователя с таким id не существует!"));
+//        user.setEmail(userDto.getEmail());
+//        user.setPassword(userDto.getPassword());
+//
+//        UserDto updatedUserDto = new UserDto();
+//        updatedUserDto.setId(user.getId());
+//        updatedUserDto.setEmail(user.getEmail());
+//        updatedUserDto.setPassword(user.getPassword());
+//
+//        return updatedUserDto;
+//    }
 
-        UserDto updatedUserDto = new UserDto();
-        updatedUserDto.setId(user.getId());
-        updatedUserDto.setEmail(user.getEmail());
-        updatedUserDto.setPassword(user.getPassword());
-
-        return updatedUserDto;
-    }
-
-    public List<UserDto> findAllUser() {
-        List<User> userList = userRepository.findAll();
-        List<UserDto> userDtoList = new ArrayList<>();
-
-        for (User user : userList) {
-            UserDto userDto = new UserDto();
-            userDto.setId(user.getId());
-            userDto.setEmail(user.getEmail());
-            userDto.setPassword(user.getPassword());
-            userDtoList.add(userDto);
-        }
-
-        return userDtoList;
-    }
+//    public List<UserDto> findAllUser() {
+//        List<User> userList = userRepository.findAll();
+//        List<UserDto> userDtoList = new ArrayList<>();
+//
+//        for (User user : userList) {
+//            UserDto userDto = new UserDto();
+//            userDto.setId(user.getId());
+//            userDto.setEmail(user.getEmail());
+//            userDto.setPassword(user.getPassword());
+//            userDtoList.add(userDto);
+//        }
+//
+//        return userDtoList;
+//    }
 
     public void deleteUser(Long id) {
         User user = this.userRepository.findById(id)

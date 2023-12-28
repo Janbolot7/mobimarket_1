@@ -31,4 +31,7 @@ public interface UserService {
     List<Product> findAllUserProducts(User user);
 
     public boolean findByPhoneNumberAndVerified(String newPhoneNumber);
+
+    void updateFullDateOfUser(FullInfoUserDto fullInfoUserDto);
+
 }

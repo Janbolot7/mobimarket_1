@@ -27,8 +27,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private final UserServiceImpl userServiceImpl;
+//    @Autowired
+//    private final UserServiceImpl userServiceImpl;
     @Autowired
     private final UserService userService;
     @Autowired
@@ -41,15 +41,15 @@ public class UserController {
     private final SmsService smsService;
 
 
-    @PutMapping("/updateUser")
-    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable long id) {
-        return userServiceImpl.updateUser(userDto, id);
-    }
+//    @PutMapping("/updateUser")
+//    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable long id) {
+//        return userServiceImpl.updateUser(userDto, id);
+//    }
 
-    @GetMapping("/findAll")
-    public List<UserDto> findAll() {
-        return userServiceImpl.findAllUser();
-    }
+//    @GetMapping("/findAll")
+//    public List<UserDto> findAll() {
+//        return userServiceImpl.findAllUser();
+//    }
 
 //    @DeleteMapping("/deleteUser")
 //    public void deleteUser(@RequestParam Long id) {
@@ -59,7 +59,7 @@ public class UserController {
     //new controller for Full Info User
     @PostMapping("/fullInfoOfUser")
     public void addUser(@RequestBody FullInfoUserDto fullInfoUserDto) {
-        userServiceImpl.updateFullDateOfUser(fullInfoUserDto);
+        userService.updateFullDateOfUser(fullInfoUserDto);
     }
 
     @GetMapping("/userProducts/{userId}")
