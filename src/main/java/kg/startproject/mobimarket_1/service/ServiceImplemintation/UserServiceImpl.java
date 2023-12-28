@@ -346,5 +346,9 @@ public class UserServiceImpl implements UserService { //UserDetailsService
 
         return user.getVerified();
     }
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 }
 
