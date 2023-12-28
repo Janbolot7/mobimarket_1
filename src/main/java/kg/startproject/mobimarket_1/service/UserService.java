@@ -5,9 +5,11 @@ import kg.startproject.mobimarket_1.dto.ProductListDto;
 import kg.startproject.mobimarket_1.model.Product;
 import kg.startproject.mobimarket_1.model.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface UserService {
     List<User> getUser();
     User saveUser (User user);
