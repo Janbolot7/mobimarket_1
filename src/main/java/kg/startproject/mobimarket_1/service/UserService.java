@@ -5,6 +5,7 @@ import kg.startproject.mobimarket_1.dto.ProductListDto;
 import kg.startproject.mobimarket_1.model.Product;
 import kg.startproject.mobimarket_1.model.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
