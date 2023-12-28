@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-
 public class UserServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
     private RoleService roleService;
