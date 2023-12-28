@@ -64,7 +64,7 @@ public class SecurityConfig {
 
                         "/user/updateUser",
                         "/user/findAll",
-                        "/user/deleteUser",
+                        //"/user/deleteUser",
                         "/user/fullInfoOfUser",
                         "/user/userProducts/{userId}",
                         "/user/favorite-products/{userId}",

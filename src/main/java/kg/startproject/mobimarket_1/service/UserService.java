@@ -15,7 +15,7 @@ public interface UserService {
     User saveUser (User user);
     public FullInfoUserDto getSingleUser(int id);
     public FullInfoUserDto getSingleUserByLogin(String username);
-    void deleteUser (int id);
+//    void deleteUser (int id);
     public ResponseEntity<String> updatePhoneNumber(int userId, String newPhoneNumber);
     public User updateUser(String username, User updatedUser);
     public User getUserById(int userId);

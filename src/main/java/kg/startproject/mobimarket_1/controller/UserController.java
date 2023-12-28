@@ -50,10 +50,10 @@ public class UserController {
         return userServiceImpl.findAllUser();
     }
 
-    @DeleteMapping("/deleteUser")
-    public void deleteUser(@RequestParam Long id) {
-        userServiceImpl.deleteUser(id);
-    }
+//    @DeleteMapping("/deleteUser")
+//    public void deleteUser(@RequestParam Long id) {
+//        userServiceImpl.deleteUser(id);
+//    }
 
     //new controller for Full Info User
     @PostMapping("/fullInfoOfUser")

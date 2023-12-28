@@ -13,6 +13,7 @@ import kg.startproject.mobimarket_1.repository.UserRepository;
 import kg.startproject.mobimarket_1.repository.VerificationCodeRepository;
 import kg.startproject.mobimarket_1.service.ProductService;
 import kg.startproject.mobimarket_1.service.RoleService;
+import kg.startproject.mobimarket_1.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService { //UserDetailsService
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private RoleService roleService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ProductService productService;
@@ -43,6 +47,30 @@ public class UserServiceImpl implements UserDetailsService {
     private ProductRepository productRepository;
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
+    @Override
+    public List<User> getUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public FullInfoUserDto getSingleUser(int id) {
+        return null;
+    }
+
+    @Override
+    public FullInfoUserDto getSingleUserByLogin(String username) {
+        return null;
+    }
+
+//    @Override
+//    public void deleteUser(int id) {
+//        userRepository.deleteById(id);
+//    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -59,18 +87,18 @@ public class UserServiceImpl implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
-                String.format("Пользователь '%s' не найден", username)
-        ));
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
-        );
-    }
+//    @Override
+//    @Transactional
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+//                String.format("Пользователь '%s' не найден", username)
+//        ));
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getUsername(),
+//                user.getPassword(),
+//                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
+//        );
+//    }
 
     public User createNewUser(RegistrationUserDto registrationUserDto) {
         User user = new User();
@@ -112,11 +140,11 @@ public class UserServiceImpl implements UserDetailsService {
         return userDtoList;
     }
 
-    public void deleteUser(Long id) {
-        User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователя с таким id не существует!"));
-        userRepository.deleteById(user.getId());
-    }
+//    public void deleteUser(Long id) {
+//        User user = this.userRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("Пользователя с таким id не существует!"));
+//        userRepository.deleteById(user.getId());
+//    }
 
     //New method
     public void updateFullDateOfUser(FullInfoUserDto fullInfoUserDto) {
@@ -228,6 +256,11 @@ public class UserServiceImpl implements UserDetailsService {
         } else {
             throw new EntityNotFoundException("Пользователь с идентификатором не найден: " + userId);
         }
+    }
+
+    @Override
+    public User findByLogin(String username) {
+        return null;
     }
 
     public User findByUsername(String username) {
