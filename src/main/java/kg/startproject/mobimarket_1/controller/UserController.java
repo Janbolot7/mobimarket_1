@@ -29,15 +29,10 @@ public class UserController {
 
 //    @Autowired
 //    private final UserServiceImpl userServiceImpl;
-    @Autowired
     private final UserService userService;
-    @Autowired
     private ProductService productService;
-    @Autowired
     private ProductRepository productRepository;
-    @Autowired
     private VerificationCodeRepository verificationCodeRepository;
-    @Autowired
     private final SmsService smsService;
 
 
