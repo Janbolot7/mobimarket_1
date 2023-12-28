@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService { //UserDetailsService
+public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -47,30 +47,22 @@ public class UserServiceImpl implements UserService { //UserDetailsService
     private ProductRepository productRepository;
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
-    @Override
+
     public List<User> getUser() {
         return userRepository.findAll();
     }
 
-    @Override
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    @Override
     public FullInfoUserDto getSingleUser(int id) {
         return null;
     }
 
-    @Override
     public FullInfoUserDto getSingleUserByLogin(String username) {
         return null;
     }
-
-//    @Override
-//    public void deleteUser(int id) {
-//        userRepository.deleteById(id);
-//    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -140,11 +132,11 @@ public class UserServiceImpl implements UserService { //UserDetailsService
         return userDtoList;
     }
 
-//    public void deleteUser(Long id) {
-//        User user = this.userRepository.findById(id)
-//                .orElseThrow(() -> new NotFoundException("Пользователя с таким id не существует!"));
-//        userRepository.deleteById(user.getId());
-//    }
+    public void deleteUser(Long id) {
+        User user = this.userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Пользователя с таким id не существует!"));
+        userRepository.deleteById(user.getId());
+    }
 
     //New method
     public void updateFullDateOfUser(FullInfoUserDto fullInfoUserDto) {
@@ -258,8 +250,12 @@ public class UserServiceImpl implements UserService { //UserDetailsService
         }
     }
 
-    @Override
     public User findByLogin(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return user;
+        }
         return null;
     }
 
@@ -349,6 +345,11 @@ public class UserServiceImpl implements UserService { //UserDetailsService
             return false;
 
         return user.getVerified();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 }
 

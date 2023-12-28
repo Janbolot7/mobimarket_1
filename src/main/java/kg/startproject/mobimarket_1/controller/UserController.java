@@ -13,6 +13,7 @@ import kg.startproject.mobimarket_1.configuration.SwaggerConfig;
 import kg.startproject.mobimarket_1.service.SmsService;
 import kg.startproject.mobimarket_1.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
 
 
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Api(tags = SwaggerConfig.USER)
 @RestController
 @RequestMapping("/user")

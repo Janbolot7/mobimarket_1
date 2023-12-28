@@ -23,7 +23,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
 
     private UserServiceImpl userService;
-
     private JwtRequestFilter jwtRequestFilter;
     private AuthenticationProvider authenticationProvider;
 
