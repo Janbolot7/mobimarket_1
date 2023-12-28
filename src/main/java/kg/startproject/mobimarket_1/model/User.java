@@ -47,8 +47,6 @@ public class User {
     @Column(name = "birth_date")
     LocalDate birthDate;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
     private String avatar;
 
     private Boolean enabled = false;

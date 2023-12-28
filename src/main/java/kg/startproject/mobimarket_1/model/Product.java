@@ -23,7 +23,6 @@ public class Product {
     private int numberOfLikes;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
     private String image;
 
     @ManyToOne
