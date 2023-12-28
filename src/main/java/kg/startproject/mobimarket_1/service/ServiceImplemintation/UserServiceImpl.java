@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService { //UserDetailsService
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -345,11 +345,6 @@ public class UserServiceImpl implements UserDetailsService {
             return false;
 
         return user.getVerified();
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
     }
 }
 
