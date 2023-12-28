@@ -1,149 +1,150 @@
 package kg.startproject.mobimarket_1.service.ServiceImplemintation;
 
-import kg.startproject.mobimarket_1.dto.ProductDto;
-import kg.startproject.mobimarket_1.dto.response.ProductResponse;
+
+import com.twilio.rest.api.v2010.Account;
+import kg.startproject.mobimarket_1.dto.ProductFullDto;
+import kg.startproject.mobimarket_1.dto.ProductListDto;
+import kg.startproject.mobimarket_1.dto.request.ProductSaveRequestDto;
 import kg.startproject.mobimarket_1.exceptions.NotFoundException;
+import kg.startproject.mobimarket_1.exceptions.VerificationException;
 import kg.startproject.mobimarket_1.model.Product;
+import kg.startproject.mobimarket_1.model.User;
 import kg.startproject.mobimarket_1.repository.ProductRepository;
 import kg.startproject.mobimarket_1.service.ProductService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
+
     private final ProductRepository productRepository;
 
-//    @Override
-//    public ProductDto saveProduct(ProductDto productDto) {
-//
-//        Product product = ProductMapper.INSTANCE.toEntity(productDto);
-//
-//        try {
-//            Product productSave = productRepository.save(product);
-//            return ProductMapper.INSTANCE.toDTO(productSave);
-//        } catch (RuntimeException e) {
-//            throw new RuntimeException("Не удалось сохранить продукт в базе!", e);
-//        }
-//    }
+    @Autowired
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     @Override
-    public ProductDto saveProduct(ProductDto productDto) {
+    @Transactional
+    public Product saveProduct(ProductSaveRequestDto requestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        if (!user.getVerified()) {
+            System.out.println("Пользователь не проверен ");
+            throw new VerificationException("Пользователь не верифицирован. Чтобы добавить новый продукт, необходимо предварительно подтвердить свой номер телефона.");
+        }
+
         Product product = new Product();
-        product.setPrice(BigDecimal.valueOf(productDto.getPrice()));
-        product.setDescription(productDto.getDescription());
+        String fileName = StringUtils.cleanPath(requestDto.getImage().getOriginalFilename());
 
-        try {
-            Product savedProduct = productRepository.save(product);
-            ProductDto savedProductDto = new ProductDto();
-            savedProductDto.setPrice(savedProduct.getPrice().doubleValue());
-            savedProductDto.setDescription(savedProduct.getDescription());
-            return savedProductDto;
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Не удалось сохранить продукт в базе!", e);
+        if (fileName.contains("..")) {
+            System.out.println("Недействительный файл");
         }
-    }
 
-
-    private String fileDownload(MultipartFile file) {
         try {
-            File path = new File("C:\\" + file.getOriginalFilename());
-            path.createNewFile();
-            FileOutputStream output = new FileOutputStream(path);
-            output.write(file.getBytes());
-            output.close();
-            return path.getAbsolutePath();
-        } catch (Exception e) {
+            product.setImage(Base64.getEncoder().encodeToString(requestDto.getImage().getBytes()));
+        } catch (IOException e) {
             e.printStackTrace();
-            return "";
         }
+
+        product.setShortDescription(requestDto.getShortDescription());
+        product.setFullDescription(requestDto.getFullDescription());
+        product.setProductName(requestDto.getProductName());
+        product.setPrice(requestDto.getPrice());
+        product.setUser(user);
+
+        return productRepository.save(product);
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto, long id) {
-        Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Продукта с таким id не существует!"));
-
-        product.setPrice(BigDecimal.valueOf(productDto.getPrice()));
-        product.setDescription(productDto.getDescription());
-
-        try {
-            Product productSave = productRepository.save(product);
-            ProductDto updatedProductDto = new ProductDto();
-            updatedProductDto.setPrice(productSave.getPrice().doubleValue());
-            updatedProductDto.setDescription(productSave.getDescription());
-            return updatedProductDto;
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Не удалось обновить продукт в базе!", e);
-        }
+    public Product getProductById(int productId) {
+        return productRepository.findById(productId).orElse(null);
     }
 
+    @Override
+    public Product updateProduct(int productId, Product updatedProduct) {
+        System.out.println("Вход в метод updateProduct");
 
-//    @Override
-//    public ProductDto updateProduct(ProductDto productDto, long id) {
-//        Product product = this.productRepository.findById(id)
-//                .orElseThrow(() -> new NotFoundException("Продукта с таким id не существует!"));
-//
-//        ProductMapper.INSTANCE.update(product, productDto);
-//
-//        try {
-//            Product productSave = productRepo.save(product);
-//            return ProductMapper.INSTANCE.toDTO(productSave);
-//        } catch (RuntimeException e) {
-//            throw new RuntimeException("Не удалось обновить продукт в базе!", e);
-//        }
-//    }
+        Product existingProduct = productRepository.findById(productId).orElse(null);
+
+
+        if (existingProduct == null) {
+            return null;
+
+        }
+
+        BeanUtils.copyProperties(updatedProduct, existingProduct, "product_id");
+
+        return productRepository.save(existingProduct);
+    }
 
     @Override
-    public List<ProductResponse> findAllProduct() {
+    public List<ProductListDto> findAllProducts() {
         List<Product> products = productRepository.findAll();
-        List<ProductResponse> productResponses = new ArrayList<>();
 
-        for (Product product : products) {
-            ProductResponse productResponse = new ProductResponse();
-            productResponse.setId(product.getId());
-            productResponse.setPrice(product.getPrice().doubleValue());
-            productResponse.setDescription(product.getDescription());
-            productResponses.add(productResponse);
+        List<ProductListDto> productListDtos = products.stream()
+                .map(product -> new ProductListDto(
+                        product.getProduct_id(),
+                        product.getImage(),
+                        product.getProductName(),
+                        product.getPrice(),
+                        product.getNumberOfLikes() // Assuming you have a getter for the like count
+                ))
+                .collect(Collectors.toList());
+
+        return productListDtos;
+    }
+
+    @Override
+    public ProductFullDto findSingleProduct(int id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return new ProductFullDto(
+                    product.getProduct_id(),
+                    product.getImage(),
+                    product.getProductName(),
+                    product.getPrice(),
+                    product.getShortDescription(),
+                    product.getFullDescription(),
+                    product.getNumberOfLikes()
+            );
         }
 
-        return productResponses;
+        throw new RuntimeException("ProductDto не найден " + id);
     }
 
-//    @Override
-//    public List<ProductResponse> findAllProduct() {
-//        return ProductMapper.INSTANCE.toResponseList(productRepository.findAll());
-//    }
-
-    @Override
-    public ProductDto getProductById(Long id) {
-        Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Продукта с таким id не существует!"));
-
-        ProductDto productDto = new ProductDto();
-        productDto.setPrice(product.getPrice().doubleValue());
-        productDto.setDescription(product.getDescription());
-
-        return productDto;
+    public boolean incrementLikeCount(Integer product_id) {
+        Optional<Product> productOptional = productRepository.findById(product_id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.incrementLikeCount(); // Вызываем метод инкремента количества лайков в классе Product
+            productRepository.save(product);
+            return true;
+        }
+        return false;
     }
 
-//    @Override
-//    public ProductDto getProductById(Long id) {
-//        Product product = this.productRepository.findById(id)
-//                .orElseThrow(() -> new NotFoundException("Продукта с таким id не существует!"));
-//        return ProductMapper.INSTANCE.toDTO(product);
-//    }
-
-    @Override
-    public void deleteProduct(Long id) {
-        Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Продукта с таким id не существует!"));
-        productRepository.deleteById(product.getId());
+    public boolean decrementLikeCount(Integer product_id) {
+        Optional<Product> productOptional = productRepository.findById(product_id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.decrementLikeCount(); // Вызываем метод декремента количества лайков в классе Product
+            productRepository.save(product);
+            return true;
+        }
+        return false;
     }
 }

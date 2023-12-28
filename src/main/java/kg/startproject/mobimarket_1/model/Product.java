@@ -1,27 +1,50 @@
 package kg.startproject.mobimarket_1.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Column(name = "price", nullable = false)
-    BigDecimal price;
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn
-    Image image;
-    @Column(name = "description")
-    String description;
+    private int product_id;
+    private String productName;
+    private int price;
+    private String shortDescription;
+    private String fullDescription;
+    private int numberOfLikes;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String image;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            nullable = false
+    )
+    private User user;
+
+    @ManyToMany(mappedBy = "favoriteProducts")
+    private Set<User> favoriteByUsers = new HashSet<>();
+
+
+    public void incrementLikeCount() {
+        numberOfLikes++;
+    }
+
+    public void decrementLikeCount() {
+        if (numberOfLikes > 0) {
+            numberOfLikes--;
+        }
+    }
+
 }
