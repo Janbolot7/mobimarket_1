@@ -14,8 +14,8 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findAllByUser(User user);
-    @Modifying
-    @Query("UPDATE Product p SET p.likesCount = :likesCount WHERE p.id = :productId")
-    void updateLikesCount(@Param("productId") Integer productId, @Param("likesCount") int likesCount);
+//    @Modifying
+//    @Query("UPDATE Product p SET p.likesCount = :likesCount WHERE p.id = :productId")
+//    void updateLikesCount(@Param("productId") Integer productId, @Param("likesCount") int likesCount);
 
 }
