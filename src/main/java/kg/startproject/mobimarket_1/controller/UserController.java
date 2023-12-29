@@ -52,7 +52,7 @@ public class UserController {
 //    }
 
     //new controller for Full Info User
-    @PostMapping("/fullInfoOfUser")
+    @PostMapping("/fullInfoOfUser1")
     public void addUser(@RequestBody FullInfoUserDto fullInfoUserDto) {
         userService.updateFullDateOfUser(fullInfoUserDto);
     }
