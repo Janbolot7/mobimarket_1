@@ -143,9 +143,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
         User user = new User();
         user.setFirstName(fullInfoUserDto.getFirstName());
         user.setLastName(fullInfoUserDto.getLastName());
-        user.setAvatar(fullInfoUserDto.getAvatar());
-        user.setUsername(fullInfoUserDto.getUsername());
-        user.setEmail(fullInfoUserDto.getEmail());
+//        user.setUsername(fullInfoUserDto.getUsername());
+//        user.setEmail(fullInfoUserDto.getEmail());
         user.setPhoneNumber(fullInfoUserDto.getPhoneNumber());
         user.setBirthDate(fullInfoUserDto.getBirthDate());
         userRepository.save(user);
@@ -159,9 +158,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
                     userEntity.getId(),
                     userEntity.getFirstName(),
                     userEntity.getLastName(),
-                    userEntity.getAvatar(),
-                    userEntity.getUsername(),
-                    userEntity.getEmail(),
+//                    userEntity.getUsername(),
+//                    userEntity.getEmail(),
                     userEntity.getPhoneNumber(),
                     userEntity.getBirthDate()
             );

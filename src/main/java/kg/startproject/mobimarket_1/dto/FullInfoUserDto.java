@@ -15,9 +15,8 @@ public class FullInfoUserDto {
     Long id;
     String firstName;
     String lastName;
-    String username;
-    String email;
-    String avatar;
+//    String username;
+//    String email;
     String phoneNumber;
     LocalDate birthDate;
 }
