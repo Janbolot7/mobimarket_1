@@ -101,6 +101,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE, "/product/**").hasRole("USER")
 
                 .antMatchers(HttpMethod.PUT,"/user/update").hasAnyRole("USER")
+                .antMatchers(HttpMethod.POST,"/product/saveProduct").hasAnyRole("USER")
 
                 .anyRequest()
                 .authenticated()
