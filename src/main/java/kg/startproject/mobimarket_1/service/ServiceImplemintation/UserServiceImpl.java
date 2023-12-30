@@ -79,18 +79,18 @@ public class UserServiceImpl implements UserDetailsService, UserService{
         this.passwordEncoder = passwordEncoder;
     }
 
-//    @Override
-//    @Transactional
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
-//                String.format("Пользователь '%s' не найден", username)
-//        ));
-//        return new org.springframework.security.core.userdetails.User(
-//                user.getUsername(),
-//                user.getPassword(),
-//                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
-//        );
-//    }
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("Пользователь '%s' не найден", username)
+        ));
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
+        );
+    }
 
     public User createNewUser(RegistrationUserDto registrationUserDto) {
         User user = new User();
@@ -345,8 +345,8 @@ public class UserServiceImpl implements UserDetailsService, UserService{
         return user.getVerified();
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
-    }
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        return null;
+//    }
 }
 
