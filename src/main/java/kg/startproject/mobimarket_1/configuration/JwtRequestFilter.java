@@ -31,10 +31,16 @@ class JwtRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        if (request.getServletPath().contains("/product")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (request.getServletPath().contains("/api")) {
             filterChain.doFilter(request, response);
             return;
         }
+
 
         String authHeader = request.getHeader("Authorization");
         String username = null;
