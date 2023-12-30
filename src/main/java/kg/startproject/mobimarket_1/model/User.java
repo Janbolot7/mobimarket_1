@@ -47,7 +47,7 @@ public class User {
     @Column(name = "birth_date")
     LocalDate birthDate;
 
-    private String avatar;
+//    private String avatar;
 
     private Boolean enabled = false;
     @Column(nullable = false)
