@@ -34,28 +34,38 @@ public class RegistrationService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
-        try {
-            Authentication authentication =
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authRequest.getUsername(),
-                            authRequest.getPassword()
-                    )
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(
-                    new AppError(
-                            HttpStatus.UNAUTHORIZED.value(),
-                            "Неправильный логин или пароль"),
-                    HttpStatus.UNAUTHORIZED);
-        }
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
-        String token = jwtTokenUtils.generateToken(userDetails);
-
-        return ResponseEntity.ok(new RegistrationResponse(null, userDetails.getUsername(), token));
-    }
+//    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+//        try {
+//            Authentication authentication =
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            authRequest.getUsername(),
+//                            authRequest.getPassword()
+//                    )
+//            );
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//        } catch (BadCredentialsException e) {
+//            return new ResponseEntity<>(
+//                    new AppError(
+//                            HttpStatus.UNAUTHORIZED.value(),
+//                            "Неправильный логин или пароль"),
+//                    HttpStatus.UNAUTHORIZED);
+//        }
+//        UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
+//        String token = jwtTokenUtils.generateToken(userDetails);
+//
+//        return ResponseEntity.ok(new RegistrationResponse(null, userDetails.getUsername(), token));
+//    }
+public ResponseEntity<RegistrationResponse> username(@RequestBody JwtRequest request) {
+    authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    request.getUsername(),
+                    request.getPassword()
+            ));
+    var user = userRepository.findFirstByUsername(request.getUsername()).orElseThrow();
+    var jwtToken = jwtTokenUtils.generateToken((UserDetails) user);
+    return ResponseEntity.ok(new RegistrationResponse(null, user.getUsername(), jwtToken));
+}
 
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
         if (userRepository.findFirstByUsername(registrationUserDto.getUsername()).isPresent()) {
