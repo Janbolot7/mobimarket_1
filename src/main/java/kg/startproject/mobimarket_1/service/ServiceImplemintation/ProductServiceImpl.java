@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Product saveProduct(ProductSaveRequestDto requestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getPrincipal().toString());
+        System.out.println(authentication.getName().toString());
         User user = (User) authentication.getPrincipal();
 
         if (!user.getVerified()) {
