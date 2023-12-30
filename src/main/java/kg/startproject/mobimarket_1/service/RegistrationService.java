@@ -54,11 +54,11 @@ public class RegistrationService {
     }
 
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
-        if (userRepository.findByUsername(registrationUserDto.getUsername()).isPresent()) {
+        if (userRepository.findFirstByUsername(registrationUserDto.getUsername()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
         }
 
-        if (userRepository.findByEmail(registrationUserDto.getEmail()).isPresent()) {
+        if (userRepository.findFirstByEmail(registrationUserDto.getEmail()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
         }
 
